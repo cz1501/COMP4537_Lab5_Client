@@ -1,4 +1,4 @@
-const url = "http://localhost:3000";
+const url = "https://cz-ks-comp4537-lab5-935f0204a0a6.herokuapp.com";
 
 document.getElementById("insert-btn").addEventListener("click", function () {
   const rows = [
@@ -8,7 +8,7 @@ document.getElementById("insert-btn").addEventListener("click", function () {
     { name: "Elon Musk", dob: "1999-01-01" },
   ];
   const xhr = new XMLHttpRequest();
-  xhr.open("POST", "http://localhost:3000/insert", true);
+  xhr.open("POST", `${url}/insert`, true);
   xhr.setRequestHeader("Content-Type", "application/json");
   xhr.onload = function () {
     if (xhr.status === 200) {
@@ -36,7 +36,7 @@ document
       const xhr = new XMLHttpRequest();
       xhr.open(
         "GET",
-        `http://localhost:3000/query?sql=${encodeURIComponent(query)}`,
+        `${url}/query?sql=${encodeURIComponent(query)}`,
         true
       );
       xhr.onload = function () {
@@ -51,7 +51,7 @@ document
       xhr.send();
     } else if (query.toLowerCase().startsWith("insert")) {
       const xhr = new XMLHttpRequest();
-      xhr.open("POST", "http://localhost:3000/query", true);
+      xhr.open("POST", `${url}/query`, true);
       xhr.setRequestHeader("Content-Type", "application/json");
       xhr.onload = function () {
         if (xhr.status === 200) {
