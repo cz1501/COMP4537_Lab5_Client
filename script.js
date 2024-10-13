@@ -1,6 +1,14 @@
 const url = "https://cz-ks-comp4537-lab5-935f0204a0a6.herokuapp.com";
 
-document.getElementById("insert-btn").addEventListener("click", function () {
+
+
+const insertBtn = document.getElementById("insert-btn");
+
+insertBtn.style.width = "200px";
+insertBtn.style.height = "50px";
+insertBtn.innerText = messages.insertLabel;
+
+insertBtn.addEventListener("click", function () {
   const rows = [
     { name: "Sara Brown", dob: "1901-01-01" },
     { name: "John Smith", dob: "1964-01-01" },
@@ -13,10 +21,10 @@ document.getElementById("insert-btn").addEventListener("click", function () {
   xhr.onload = function () {
     if (xhr.status === 200) {
       document.getElementById("insert-response").innerText =
-        "Row inserted successfully: " + xhr.responseText;
+        messages.rowSuccess + xhr.responseText;
     } else {
       document.getElementById("insert-response").innerText =
-        "Error inserting row.";
+        messages.rowError;
     }
   };
 
@@ -28,43 +36,47 @@ document.getElementById("insert-btn").addEventListener("click", function () {
   window.lastInsertedRowIndex++;
 });
 
-document
-  .getElementById("execute-query-btn")
-  .addEventListener("click", function () {
-    const query = document.getElementById("sql-query").value.trim();
-    if (query.toLowerCase().startsWith("select")) {
-      const xhr = new XMLHttpRequest();
-      xhr.open(
-        "GET",
-        `${url}/query?sql=${encodeURIComponent(query)}`,
-        true
-      );
-      xhr.onload = function () {
-        if (xhr.status === 200) {
-          document.getElementById("query-response").innerText =
-            xhr.responseText;
-        } else {
-          document.getElementById("query-response").innerText =
-            "Error executing query.";
-        }
-      };
-      xhr.send();
-    } else if (query.toLowerCase().startsWith("insert")) {
-      const xhr = new XMLHttpRequest();
-      xhr.open("POST", `${url}/query`, true);
-      xhr.setRequestHeader("Content-Type", "application/json");
-      xhr.onload = function () {
-        if (xhr.status === 200) {
-          document.getElementById("query-response").innerText =
-            xhr.responseText;
-        } else {
-          document.getElementById("query-response").innerText =
-            "Error executing query.";
-        }
-      };
-      xhr.send(JSON.stringify({ sql: query }));
-    } else {
-      document.getElementById("query-response").innerText =
-        "Only SELECT and INSERT queries are allowed.";
-    }
-  });
+const queryBtn = document.getElementById("execute-query-btn");
+
+queryBtn.style.width = "200px";
+queryBtn.style.height = "50px";
+queryBtn.innerText = messages.queryLabel;
+
+queryBtn.addEventListener("click", function () {
+  const query = document.getElementById("sql-query").value.trim();
+  if (query.toLowerCase().startsWith("select")) {
+    const xhr = new XMLHttpRequest();
+    xhr.open(
+      "GET",
+      `${url}/query?sql=${encodeURIComponent(query)}`,
+      true
+    );
+    xhr.onload = function () {
+      if (xhr.status === 200) {
+        document.getElementById("query-response").innerText =
+          xhr.responseText;
+      } else {
+        document.getElementById("query-response").innerText =
+          queryError;
+      }
+    };
+    xhr.send();
+  } else if (query.toLowerCase().startsWith("insert")) {
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", `${url}/query`, true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.onload = function () {
+      if (xhr.status === 200) {
+        document.getElementById("query-response").innerText =
+          xhr.responseText;
+      } else {
+        document.getElementById("query-response").innerText =
+          queryError;
+      }
+    };
+    xhr.send(JSON.stringify({ sql: query }));
+  } else {
+    document.getElementById("query-response").innerText =
+      queryRules;
+  }
+});
